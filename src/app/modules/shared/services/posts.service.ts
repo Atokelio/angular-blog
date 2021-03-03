@@ -1,13 +1,20 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {FbCreateResponse, Post} from '../interfaces/interfaces';
-import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {FbCreateResponse, Post} from '../../../interfaces/interfaces';
+import {environment} from '../../../../environments/environment';
+import {map, switchMap, tap} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
-  constructor(private http: HttpClient) {}
+  posts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([])
+
+  constructor(private http: HttpClient) {
+  }
+
+  fetch() {
+    this.getAll().subscribe(posts => this.posts$.next(posts))
+  }
 
   create(post: Post): Observable<Post> {
     return this.http.post(`${environment.fbDbUrl}/posts.json`, post)
@@ -43,8 +50,13 @@ export class PostsService {
       }))
   }
 
-  remove(id: string): Observable<void> {
+  remove(id: string): Observable<any> {
     return this.http.delete<void>(`${environment.fbDbUrl}/posts/${id}.json`)
+      .pipe(
+        switchMap((data) => this.posts$),
+        map(posts => posts.filter(post => post.id !== id)),
+        tap(posts => this.posts$.next(posts))
+      )
   }
 
   update(post: Post): Observable<Post> {

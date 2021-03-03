@@ -1,15 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Post} from '../../../../interfaces/interfaces';
-import {PostsService} from '../../../../services/posts.service';
-import {Observable, of} from 'rxjs';
+import {PostsService} from '../../../shared/services/posts.service';
+import {Observable} from 'rxjs';
 import {AlertService} from '../../services/alert.service';
-import {map, switchMap, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardPageComponent implements OnInit {
 
@@ -23,16 +22,10 @@ export class DashboardPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.posts$ = this.postsService.getAll();
+    this.posts$ = this.postsService.posts$;
   }
 
   remove(id: string) {
-    this.postsService.remove(id).pipe(
-      switchMap(() => this.posts$),
-      map(posts => posts.filter(post => post.id != id)),
-      tap(() => this.alert.warning('Пост был удален')),
-    ).subscribe(data => {
-      this.posts$ = of(data);
-    });
+    this.postsService.remove(id).subscribe(() => this.alert.warning('Пост был удален'));
   }
 }

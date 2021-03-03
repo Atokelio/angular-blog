@@ -13,6 +13,7 @@ import {SearchPipe} from './pipes/search.pipe';
 import {AlertComponent} from './components/alert/alert.component';
 import {AlertService} from './services/alert.service';
 import {AuthModule} from './modules/auth/auth.module';
+import {PostsResolver} from '../shared/resolvers/posts.resolver';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {AuthModule} from './modules/auth/auth.module';
       {
         path: '', component: AdminLayoutComponent, children: [
           {path: '', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)},
-          {path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthGuard]},
+          {path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthGuard], resolve: {posts: PostsResolver}},
           {path: 'create', component: CreatePageComponent, canActivate: [AuthGuard]},
           {path: 'post/:id/edit', component: EditPageComponent, canActivate: [AuthGuard]}
         ]

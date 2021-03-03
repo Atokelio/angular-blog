@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {PostsService} from '../../../../services/posts.service';
+import {PostsService} from '../../../shared/services/posts.service';
 import {Observable} from 'rxjs';
 import {Post} from '../../../../interfaces/interfaces';
 

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Post} from '../../../../interfaces/interfaces';
-import {PostsService} from '../../../../services/posts.service';
+import {PostsService} from '../../../shared/services/posts.service';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
