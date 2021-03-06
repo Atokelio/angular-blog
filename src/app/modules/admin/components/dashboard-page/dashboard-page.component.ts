@@ -13,6 +13,7 @@ import {AlertService} from '../../services/alert.service';
 export class DashboardPageComponent implements OnInit {
 
   posts$: Observable<Post[]>
+  posts: Post[]
   searchStr = ''
 
   constructor(
@@ -26,6 +27,15 @@ export class DashboardPageComponent implements OnInit {
   }
 
   remove(id: string) {
-    this.postsService.remove(id).subscribe(() => this.alert.warning('Пост был удален'));
+    this.postsService.remove(id)
+      .subscribe(() => {
+        this.alert.warning('Пост был удален')
+      });
+
+    this.postsService.posts$.subscribe((posts) => {
+      this.posts = posts.filter(post => post.id !== id)
+    })
+
+    this.postsService.posts$.next(this.posts)
   }
 }

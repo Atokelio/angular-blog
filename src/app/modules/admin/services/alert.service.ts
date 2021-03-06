@@ -10,7 +10,7 @@ export interface Alert {
 
 @Injectable()
 export class AlertService {
-  public alert$ = new Subject<Alert>()
+  public alert$: Subject<Alert> = new Subject<Alert>()
 
   success(text: string) {
     this.alert$.next({type: 'success', text})

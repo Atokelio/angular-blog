@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../../modules/auth/services/auth.service';
 
@@ -6,17 +6,14 @@ import {AuthService} from '../../modules/auth/services/auth.service';
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdminLayoutComponent implements OnInit {
+export class AdminLayoutComponent {
 
   constructor(
     private router: Router,
     public auth: AuthService
   ) {
-  }
-
-  ngOnInit() {
   }
 
   logout(event: Event) {
