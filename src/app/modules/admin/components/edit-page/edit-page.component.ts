@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {ActivatedRoute, Params} from '@angular/router';
 import {PostsService} from '../../../shared/services/posts.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {switchMap, tap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 import {Post} from '../../../../interfaces/interfaces';
-import {BehaviorSubject, ReplaySubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
@@ -16,7 +16,7 @@ import {AlertService} from '../../services/alert.service';
 export class EditPageComponent implements OnInit {
 
   form: FormGroup
-  post$: ReplaySubject<Post> = new ReplaySubject<Post>()
+  post$: Observable<Post>
   submitted$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   constructor(
@@ -28,15 +28,19 @@ export class EditPageComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-        title: new FormControl('', Validators.required),
-        text: new FormControl('', Validators.required)
-      })
+      title: new FormControl('', Validators.required),
+      text: new FormControl('', Validators.required)
+    })
 
-    this.route.params.pipe(
+    this.post$ = this.route.params.pipe(
       switchMap((params: Params) => this.postService.getById(params['id'])),
-      tap(post => this.post$.next(post)),
-      switchMap(post => this.post$),
-    ).subscribe((post: Post) => {
+    )
+
+    this.setPostSubscription()
+  }
+
+  setPostSubscription(): void {
+    this.post$.subscribe((post: Post) => {
       this.form.patchValue({
         title: post.title,
         text: post.text

@@ -27,15 +27,9 @@ export class DashboardPageComponent implements OnInit {
   }
 
   remove(id: string) {
-    this.postsService.remove(id)
+    this.postsService.removeSave(id)
       .subscribe(() => {
         this.alert.warning('Пост был удален')
       });
-
-    this.postsService.posts$.subscribe((posts) => {
-      this.posts = posts.filter(post => post.id !== id)
-    })
-
-    this.postsService.posts$.next(this.posts)
   }
 }

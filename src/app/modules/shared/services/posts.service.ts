@@ -29,7 +29,7 @@ export class PostsService {
 
   getAll(): Observable<Post[]> {
     return this.http.get(`${environment.fbDbUrl}/posts.json`)
-      .pipe(map((response: {[key: string]: any}) => {
+      .pipe(map((response: { [key: string]: any }) => {
         return Object
           .keys(response)
           .map(key => ({
@@ -42,16 +42,21 @@ export class PostsService {
 
   getById(id: string): Observable<Post> {
     return this.http.get<Post>(`${environment.fbDbUrl}/posts/${id}.json`)
-      .pipe(map((post: Post) => {
-        return {
+      .pipe(map((post: Post) => ({
           ...post, id,
           date: new Date(post.date)
-        }
-      }))
+        })
+      ))
   }
 
   remove(id: string): Observable<void> {
     return this.http.delete<void>(`${environment.fbDbUrl}/posts/${id}.json`)
+  }
+
+  removeSave(id: string): Observable<void> {
+    const posts: Post[] = this.posts$.getValue().filter(post => post.id !== id)
+    this.posts$.next(posts)
+    return this.remove(id)
   }
 
   update(post: Post): Observable<Post> {
