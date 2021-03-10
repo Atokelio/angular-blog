@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Post} from '../../../../interfaces/interfaces';
+import {Post} from '../../../shared/interfaces/interfaces';
 
 @Component({
   selector: 'app-post',

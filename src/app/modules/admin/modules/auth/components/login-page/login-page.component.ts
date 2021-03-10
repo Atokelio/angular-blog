@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core'
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {User} from '../../../../../../interfaces/interfaces';
+import {User} from '../../../../../shared/interfaces/interfaces';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';

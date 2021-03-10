@@ -3,7 +3,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {PostsService} from '../../../shared/services/posts.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {switchMap} from 'rxjs/operators';
-import {Post} from '../../../../interfaces/interfaces';
+import {Post} from '../../../shared/interfaces/interfaces';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AlertService} from '../../services/alert.service';
 

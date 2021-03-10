@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {PostsService} from '../../../shared/services/posts.service';
 import {Observable} from 'rxjs';
-import {Post} from '../../../../interfaces/interfaces';
+import {Post} from '../../../shared/interfaces/interfaces';
 import {switchMap} from 'rxjs/operators';
 
 @Component({
