@@ -3,6 +3,7 @@ import {Post} from '../../../shared/interfaces/interfaces';
 import {PostsService} from '../../../shared/services/posts.service';
 import {Observable} from 'rxjs';
 import {AlertService} from '../../services/alert.service';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -27,7 +28,9 @@ export class DashboardPageComponent implements OnInit {
   }
 
   remove(id: string) {
-    this.postsService.removeSave(id)
+    this.postsService.removeSave(id).pipe(
+        first()
+      )
       .subscribe(() => {
         this.alert.warning('Пост был удален')
       });

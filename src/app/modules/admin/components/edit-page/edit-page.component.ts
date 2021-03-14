@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {PostsService} from '../../../shared/services/posts.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {switchMap} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 import {Post} from '../../../shared/interfaces/interfaces';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
@@ -13,10 +13,11 @@ import {AlertService} from '../../services/alert.service';
   styleUrls: ['./edit-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditPageComponent implements OnInit {
+export class EditPageComponent implements OnInit, OnDestroy {
 
   form: FormGroup
   post$: Observable<Post>
+  sub$ = new Subject()
   submitted$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   constructor(
@@ -40,7 +41,10 @@ export class EditPageComponent implements OnInit {
   }
 
   setPostSubscription(): void {
-    this.post$.subscribe((post: Post) => {
+    this.post$.pipe(
+      takeUntil(this.sub$)
+    )
+      .subscribe((post: Post) => {
       this.form.patchValue({
         title: post.title,
         text: post.text
@@ -60,11 +64,16 @@ export class EditPageComponent implements OnInit {
         ...post,
         text: this.form.value.text,
         title: this.form.value.title
-      }))
+      })),
+      takeUntil(this.sub$)
     )
       .subscribe(() => {
         this.submitted$.next(false)
         this.alert.success('Пост был обновлен')
       })
+  }
+
+  ngOnDestroy() {
+    this.sub$.next()
   }
 }
